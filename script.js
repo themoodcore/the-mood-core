@@ -208,6 +208,7 @@ function checkout() {
   window.open(whatsappURL, "_blank");
 }
 
+// 5. Custom Request Form to WhatsApp
 function submitCustom(e) {
   e.preventDefault();
   
@@ -237,11 +238,9 @@ function submitCustom(e) {
   window.open(whatsappURL, "_blank");
   e.target.reset();
 }
-/ 5. Custom Request Form to WhatsApp
 
 // Initialize on Load
 document.addEventListener("DOMContentLoaded", () => {
   renderProducts();
   renderCart();
 });
-
