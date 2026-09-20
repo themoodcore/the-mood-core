@@ -11,7 +11,19 @@ const products=[
 let cart=JSON.parse(localStorage.getItem("haathse-cart")||"[]");
 
 function renderProducts(list=products){
-  document.getElementById("products").innerHTML=list.map(p=>`<article class="card"><div class="photo ${p.class}">${p.emoji}</div><h3>${p.name}</h3><p>${p.desc}</p><div class="price">₹${p.price}</div><button onclick="addToCart(${p.id})">Add to cart</button></article>`).join("");
+  document.getElementById("products").innerHTML=list.map(p=>{
+    if(p.images){
+      return `<article class="card">
+        <div class="photo" style="background:#f4f4f4; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+          <img src="${p.images[0]}" alt="${p.name}" style="width:100%; height:100%; object-fit:cover;">
+        </div>
+        <h3>${p.name}</h3><p>${p.desc}</p><div class="price">₹${p.price}</div>
+        <button onclick="addToCart(${p.id})">Add to cart</button>
+      </article>`;
+    } else {
+      return `<article class="card"><div class="photo ${p.class}">${p.emoji}</div><h3>${p.name}</h3><p>${p.desc}</p><div class="price">₹${p.price}</div><button onclick="addToCart(${p.id})">Add to cart</button></article>`;
+    }
+  }).join("");
 }
 
 function filterProducts(cat,btn){
