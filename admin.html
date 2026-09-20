@@ -1,0 +1,18 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>the.mood_core Admin</title>
+<link rel="stylesheet" href="style.css"><style>
+body{padding:30px 6%}.admin{max-width:1100px;margin:auto}.login,.panel{background:var(--paper);padding:28px;border-radius:8px;border:1px solid var(--line)}input{padding:12px;border:1px solid var(--line);margin:6px 0;width:100%}.top{display:flex;justify-content:space-between;align-items:center}.order{border-top:1px solid var(--line);padding:20px 0}.badge{display:inline-block;padding:5px 9px;border-radius:99px;background:#d8dfd1;font-size:12px}.muted{color:#777}
+</style></head><body><div class="admin">
+<div class="top"><div class="brand">Haath<span>Se</span> Admin</div><a href="/">Store</a></div>
+<div id="login" class="login" style="margin-top:30px"><h2>Admin login</h2><input id="key" type="password" placeholder="Admin key"><button class="btn" onclick="loadOrders()">Login</button><p id="msg"></p></div>
+<div id="panel" class="panel" style="display:none;margin-top:30px"><h2>Orders</h2><div id="orders"></div></div>
+</div><script>
+async function loadOrders(){
+ const key=document.getElementById("key").value;
+ const r=await fetch("/api/admin/orders",{headers:{"x-admin-key":key}});
+ const d=await r.json();
+ if(!r.ok){document.getElementById("msg").textContent=d.error;return}
+ document.getElementById("login").style.display="none";document.getElementById("panel").style.display="block";
+ document.getElementById("orders").innerHTML=d.length?d.map(o=>`<div class="order"><b>${o.customer.name}</b> <span class="badge">${o.status}</span><p>₹${o.amount} · ${o.customer.phone} · ${o.customer.email}</p><p>${o.customer.address}</p><p class="muted">${o.items.map(i=>i.name).join(", ")}</p><small>${o.orderId} · ${o.createdAt}</small></div>`).join(""):"No orders yet.";
+}
+</script></body></html>
