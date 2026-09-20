@@ -13,9 +13,12 @@ let cart=JSON.parse(localStorage.getItem("haathse-cart")||"[]");
 function renderProducts(list=products){
   document.getElementById("products").innerHTML=list.map(p=>{
     if(p.images){
+      let imagesHtml = p.images.map((img, idx) => `<img src="${img}" alt="${p.name}" style="width:100%; height:100%; object-fit:cover; display:${idx===0?'block':'none'};" class="product-slide-${p.id}">`).join("");
       return `<article class="card">
-        <div class="photo" style="height:300 × 250 px; background:#f4f4f4; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; overflow:hidden;">
-          <img src="${p.images[0]}" alt="${p.name}" style="width:100%; height:100%; object-fit:cover;">
+        <div class="photo" style="height: 180px; background: #f4f4f4; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+          ${imagesHtml}
+          <button onclick="changeSlide(event, ${p.id}, -1)" style="position:absolute; left:5px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.5); color:#fff; border:none; padding:4px 8px; cursor:pointer; border-radius:3px; z-index:10;">‹</button>
+          <button onclick="changeSlide(event, ${p.id}, 1)" style="position:absolute; right:5px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.5); color:#fff; border:none; padding:4px 8px; cursor:pointer; border-radius:3px; z-index:10;">›</button>
         </div>
         <h3>${p.name}</h3><p>${p.desc}</p><div class="price">₹${p.price}</div>
         <button onclick="addToCart(${p.id})">Add to cart</button>
@@ -40,6 +43,7 @@ function changeSlide(e, productId, direction) {
     img.style.display = idx === window.currentIndices[productId] ? 'block' : 'none';
   });
 }
+
 function filterProducts(cat,btn){
   document.querySelectorAll(".filters button").forEach(b=>b.classList.remove("active"));
   btn.classList.add("active");
@@ -66,7 +70,6 @@ function renderCart(){
   }).join(""):"<p>Your cart is empty.</p>";
   document.getElementById("cartTotal").textContent="₹"+cart.reduce((s,p)=>s+p.price,0);
 }
-
 
 function removeItem(i){
   cart.splice(i,1);
@@ -99,14 +102,12 @@ function checkout(){
   let total = cart.reduce((s,p)=>s+p.price,0);
   let itemsList = cart.map(i => `${i.name} (₹${i.price})`).join(", ");
   
-  // 1. Formspree ke zariye Email bhejna
   fetch("https://formspree.io/f/xkjgobvr", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name, email, phone, address, items: itemsList, total: "₹" + total })
   }).catch(err => console.log(err));
 
-  // 2. WhatsApp par order message bhejna
   let orderText = `*New Order Received!*%0A%0A`;
   orderText += `*Name:* ${name}%0A`;
   orderText += `*Phone:* ${phone}%0A`;
