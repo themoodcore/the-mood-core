@@ -14,17 +14,21 @@ function renderProducts(list=products){
   document.getElementById("products").innerHTML=list.map(p=>{
     if(p.images){
       let imagesHtml = p.images.map((img, idx) => `<img src="${img}" alt="${p.name}" style="width:100%; height:100%; object-fit:cover; display:${idx===0?'block':'none'};" class="product-slide-${p.id}">`).join("");
-      return `<article class="card">
+      return `<article class="card" onclick="openProductModal(${p.id})" style="cursor:pointer;">
         <div class="photo" style="height: 180px; background: #f4f4f4; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;">
           ${imagesHtml}
           <button onclick="changeSlide(event, ${p.id}, -1)" style="position:absolute; left:5px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.5); color:#fff; border:none; padding:4px 8px; cursor:pointer; border-radius:3px; z-index:10;">‹</button>
           <button onclick="changeSlide(event, ${p.id}, 1)" style="position:absolute; right:5px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.5); color:#fff; border:none; padding:4px 8px; cursor:pointer; border-radius:3px; z-index:10;">›</button>
         </div>
         <h3>${p.name}</h3><p>${p.desc}</p><div class="price">₹${p.price}</div>
-        <button onclick="addToCart(${p.id})">Add to cart</button>
+        <button onclick="event.stopPropagation(); addToCart(${p.id})">Add to cart</button>
       </article>`;
     } else {
-      return `<article class="card"><div class="photo ${p.class}">${p.emoji}</div><h3>${p.name}</h3><p>${p.desc}</p><div class="price">₹${p.price}</div><button onclick="addToCart(${p.id})">Add to cart</button></article>`;
+      return `<article class="card" onclick="openProductModal(${p.id})" style="cursor:pointer;">
+        <div class="photo ${p.class}">${p.emoji}</div>
+        <h3>${p.name}</h3><p>${p.desc}</p><div class="price">₹${p.price}</div>
+        <button onclick="event.stopPropagation(); addToCart(${p.id})">Add to cart</button>
+      </article>`;
     }
   }).join("");
 }
@@ -41,6 +45,60 @@ function changeSlide(e, productId, direction) {
   
   slides.forEach((img, idx) => {
     img.style.display = idx === window.currentIndices[productId] ? 'block' : 'none';
+  });
+}
+
+function openProductModal(id) {
+  const p = products.find(prod => prod.id === id);
+  if(!p) return;
+  
+  let modal = document.getElementById("productModal");
+  if(!modal) {
+    modal = document.createElement("div");
+    modal.id = "productModal";
+    modal.style.cssText = "position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; z-index:1000; padding:20px;";
+    document.body.appendChild(modal);
+  }
+  
+  let contentHtml = "";
+  if(p.images) {
+    let imgList = p.images.map((img, idx) => `<img src="${img}" alt="${p.name}" style="width:100%; height:250px; object-fit:cover; display:${idx===0?'block':'none'};" class="modal-slide">`).join("");
+    contentHtml = `
+      <div style="position:relative; width:100%; height:250px; background:#eee; border-radius:8px; overflow:hidden; margin-bottom:15px; display:flex; align-items:center; justify-content:center;">
+        ${imgList}
+        ${p.images.length > 1 ? `<button onclick="modalSlide(-1)" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.5); color:#fff; border:none; padding:6px 10px; cursor:pointer; border-radius:3px;">‹</button>
+        <button onclick="modalSlide(1)" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.5); color:#fff; border:none; padding:6px 10px; cursor:pointer; border-radius:3px;">›</button>` : ''}
+      </div>
+    `;
+  } else {
+    contentHtml = `<div style="font-size:60px; text-align:center; height:180px; display:flex; align-items:center; justify-content:center; background:#f4f4f4; border-radius:8px; margin-bottom:15px;">${p.emoji}</div>`;
+  }
+  
+  modal.innerHTML = `
+    <div style="background:#fff; width:100%; max-width:400px; padding:20px; border-radius:10px; position:relative; box-shadow:0 4px 15px rgba(0,0,0,0.2);">
+      <button onclick="closeProductModal()" style="position:absolute; right:15px; top:15px; background:none; border:none; font-size:22px; cursor:pointer;">&times;</button>
+      ${contentHtml}
+      <h2>${p.name}</h2>
+      <p style="color:#666; margin:10px 0;">${p.desc}</p>
+      <div style="font-size:18px; font-weight:bold; margin-bottom:15px;">₹${p.price}</div>
+      <button onclick="addToCart(${p.id}); closeProductModal();" style="width:100%; background:#000; color:#fff; border:none; padding:10px; border-radius:5px; cursor:pointer;">Add to cart</button>
+    </div>
+  `;
+  modal.style.display = "flex";
+}
+
+function closeProductModal() {
+  let modal = document.getElementById("productModal");
+  if(modal) modal.style.display = "none";
+}
+
+let modalSlideIndex = 0;
+function modalSlide(direction) {
+  let slides = document.querySelectorAll(".modal-slide");
+  if(slides.length === 0) return;
+  modalSlideIndex = (modalSlideIndex + direction + slides.length) % slides.length;
+  slides.forEach((img, idx) => {
+    img.style.display = idx === modalSlideIndex ? 'block' : 'none';
   });
 }
 
@@ -135,3 +193,4 @@ function submitCustom(e){
 
 renderProducts();
 renderCart();
+
