@@ -65,10 +65,14 @@
       <input id="customerEmail" type="email" placeholder="Email" required>
       <input id="customerPhone" placeholder="Phone number" required>
       <textarea id="customerAddress" rows="3" placeholder="Delivery address" required></textarea>
+          <div style="margin: 10px 0; font-size: 14px; display: flex; gap: 15px;">
+        <label><input type="radio" name="paymentMethod" value="Cash on Delivery (COD)" checked> COD</label>
+        <label><input type="radio" name="paymentMethod" value="Online Payment"> Online Payment</label>
+          </div>
     </div>
     <button class="btn checkout" onclick="checkout()">Pay securely with Razorpay</button>
 </aside>
-<div id="overlay" onclick="toggleCart()"></div>
+<button class="btn checkout" onclick="checkout()">Place Order / Checkout</button>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="script.js"></script>
 </body></html>
