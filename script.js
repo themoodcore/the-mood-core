@@ -60,9 +60,13 @@ function save(){
 function renderCart(){
   document.getElementById("cartCount").textContent=cart.length;
   let el=document.getElementById("cartItems");
-  el.innerHTML=cart.length?cart.map((p,i)=>`<div class="cart-item"><div class="mini">${p.emoji}</div><div><b>${p.name}</b><p>₹${p.price}</p><button onclick="removeItem(${i})">Remove</button></div></div>`).join(""):"<p>Your cart is empty.</p>";
+  el.innerHTML=cart.length?cart.map((p,i)=>{
+    let displayThumb = p.images ? `<img src="${p.images[0]}" style="width:100%; height:100%; object-fit:cover;">` : p.emoji;
+    return `<div class="cart-item"><div class="mini" style="overflow:hidden; display:flex; align-items:center; justify-content:center;">${displayThumb}</div><div><b>${p.name}</b><p>₹${p.price}</p><button onclick="removeItem(${i})">Remove</button></div></div>`;
+  }).join(""):"<p>Your cart is empty.</p>";
   document.getElementById("cartTotal").textContent="₹"+cart.reduce((s,p)=>s+p.price,0);
 }
+
 
 function removeItem(i){
   cart.splice(i,1);
