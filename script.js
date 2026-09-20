@@ -14,7 +14,7 @@ function renderProducts(list=products){
   document.getElementById("products").innerHTML=list.map(p=>{
     if(p.images){
       return `<article class="card">
-        <div class="photo" style="height:150px; background:#f4f4f4; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+        <div class="photo" style="height:300 × 250 px; background:#f4f4f4; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; overflow:hidden;">
           <img src="${p.images[0]}" alt="${p.name}" style="width:100%; height:100%; object-fit:cover;">
         </div>
         <h3>${p.name}</h3><p>${p.desc}</p><div class="price">₹${p.price}</div>
