@@ -5,7 +5,7 @@ const products=[
 {id:4,name:"Floral Thread Tee",cat:"tees",price:149,emoji:"🌸",class:"p4",desc:"Thread embroidery detail"},
 {id:5,name:"Mini Art Pouch",cat:"gifts",price:149,emoji:"🎨",class:"p5",desc:"Tiny handmade zipper pouch"},
 {id:6,name:"Custom Gift Box",cat:"gifts",price:149,emoji:"🎁",class:"p6",desc:"Curated handmade gift set"},
-{id:7,name:"03 Number Black Tee",cat:"tees",price:149,images:["Tshirt-both.webp","tshirt-front.webp","tshirt-back.webp"],desc:"Stylish front and back print tee"}
+{id:7,name:"03 Number Black Tee",cat:"tees",price:149,images:["tshirt-both.webp","tshirt-front.webp","tshirt-back.webp"],desc:"Stylish front and back print tee"}
 ];
 
 let cart=JSON.parse(localStorage.getItem("haathse-cart")||"[]");
