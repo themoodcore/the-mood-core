@@ -187,9 +187,35 @@ function checkout(){
 
 function submitCustom(e){
   e.preventDefault();
-  document.getElementById("customMsg").textContent="Thanks! Your custom request has been saved. We'll contact you shortly.";
-  e.target.reset();
+  
+  const item = e.target.querySelector('[name="item"]').value.trim();
+  const color = e.target.querySelector('[name="color"]').value.trim();
+  const budget = e.target.querySelector('[name="budget"]').value.trim();
+  const idea = e.target.querySelector('[name="idea"]').value.trim();
+  
+  if(!item || !idea){
+    alert("Please fill in the required custom request details.");
+    return;
+  }
+  
+  // WhatsApp par custom request bhejna
+  let customText = `*New Custom Design Request!*%0A%0A`;
+  customText += `*What they want:* ${item}%0A`;
+  customText += `*Base Color:* ${color || 'Not specified'}%0A`;
+  customText += `*Budget:* ₹${budget || 'Not specified'}%0A`;
+  customText += `*Design/Idea:* ${idea}%0A`;
+  
+  const whatsappNumber = "919204965346";
+  const whatsappURL = `https://wa.me/${whatsappNumber}?text=${customText}`;
+  
+  document.getElementById("customMsg").textContent="Thanks! Redirecting to WhatsApp to send your custom request...";
+  
+  setTimeout(() => {
+    window.open(whatsappURL, "_blank");
+    e.target.reset();
+  }, 1000);
 }
+
 
 renderProducts();
 renderCart();
