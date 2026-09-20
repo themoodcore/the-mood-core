@@ -26,6 +26,20 @@ function renderProducts(list=products){
   }).join("");
 }
 
+window.currentIndices = {};
+function changeSlide(e, productId, direction) {
+  e.stopPropagation();
+  if(!window.currentIndices[productId]) window.currentIndices[productId] = 0;
+  const product = products.find(p => p.id === productId);
+  if(!product || !product.images) return;
+  
+  let slides = document.querySelectorAll(`.product-slide-${productId}`);
+  window.currentIndices[productId] = (window.currentIndices[productId] + direction + slides.length) % slides.length;
+  
+  slides.forEach((img, idx) => {
+    img.style.display = idx === window.currentIndices[productId] ? 'block' : 'none';
+  });
+}
 function filterProducts(cat,btn){
   document.querySelectorAll(".filters button").forEach(b=>b.classList.remove("active"));
   btn.classList.add("active");
