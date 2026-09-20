@@ -1,10 +1,10 @@
 const products=[
-{id:1,name:"Wildflower Tote",cat:"bags",price:799,emoji:"🌼",class:"p1",desc:"Hand-painted canvas tote"},
-{id:2,name:"Leaf Stitch Tee",cat:"tees",price:999,emoji:"🌿",class:"p2",desc:"Hand-stitched cotton tee"},
-{id:3,name:"Sunset Doodle Bag",cat:"bags",price:899,emoji:"🌅",class:"p3",desc:"Original painted artwork"},
-{id:4,name:"Floral Thread Tee",cat:"tees",price:1099,emoji:"🌸",class:"p4",desc:"Thread embroidery detail"},
-{id:5,name:"Mini Art Pouch",cat:"gifts",price:499,emoji:"🎨",class:"p5",desc:"Tiny handmade zipper pouch"},
-{id:6,name:"Custom Gift Box",cat:"gifts",price:1299,emoji:"🎁",class:"p6",desc:"Curated handmade gift set"}];
+{id:1,name:"Wildflower Tote",cat:"bags",price:149,emoji:"🌼",class:"p1",desc:"Hand-painted canvas tote"},
+{id:2,name:"Leaf Stitch Tee",cat:"tees",price:149,emoji:"🌿",class:"p2",desc:"Hand-stitched cotton tee"},
+{id:3,name:"Sunset Doodle Bag",cat:"bags",price:149,emoji:"🌅",class:"p3",desc:"Original painted artwork"},
+{id:4,name:"Floral Thread Tee",cat:"tees",price:149,emoji:"🌸",class:"p4",desc:"Thread embroidery detail"},
+{id:5,name:"Mini Art Pouch",cat:"gifts",price:149,emoji:"🎨",class:"p5",desc:"Tiny handmade zipper pouch"},
+{id:6,name:"Custom Gift Box",cat:"gifts",price:149,emoji:"🎁",class:"p6",desc:"Curated handmade gift set"}];
 let cart=JSON.parse(localStorage.getItem("the.mood_core-cart")||"[]");
 
 function renderProducts(list=products){document.getElementById("products").innerHTML=list.map(p=>`<article class="card"><div class="photo ${p.class}">${p.emoji}</div><h3>${p.name}</h3><p>${p.desc}</p><div class="price">₹${p.price}</div><button onclick="addToCart(${p.id})">Add to cart</button></article>`).join("")}
