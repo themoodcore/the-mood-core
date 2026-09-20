@@ -64,6 +64,17 @@ function checkout(){
     return;
   }
   
+  let total = cart.reduce((s,p)=>s+p.price,0);
+  let itemsList = cart.map(i => `${i.name} (₹${i.price})`).join(", ");
+  
+  // 1. Formspree ke zariye Email bhejna
+  fetch("https://formspree.io/f/xkjgobvr", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, email, phone, address, items: itemsList, total: "₹" + total })
+  }).catch(err => console.log(err));
+
+  // 2. WhatsApp par order message bhejna
   let orderText = `*New Order Received!*%0A%0A`;
   orderText += `*Name:* ${name}%0A`;
   orderText += `*Phone:* ${phone}%0A`;
@@ -71,10 +82,8 @@ function checkout(){
   orderText += `*Address:* ${address}%0A%0A`;
   orderText += `*Items:*%0A`;
   
-  let total = 0;
   cart.forEach(item => {
     orderText += `- ${item.name} (₹${item.price})%0A`;
-    total += item.price;
   });
   
   orderText += `%0A*Total Amount: ₹${total}*`;
